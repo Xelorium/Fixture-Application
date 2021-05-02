@@ -12,7 +12,6 @@
         android:id="@+id/tv_item_team_name"
         android:textColor="@color/black"
         android:gravity="center"
-        android:textSize="24sp"
-        android:text="texxt" />
+        android:textSize="24sp" />
 
 </com.google.android.material.card.MaterialCardView>

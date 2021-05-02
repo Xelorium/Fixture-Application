@@ -1,4 +1,4 @@
-package com.xelorium.soccerleaguetable;
+package com.xelorium.soccerleaguetable.room;
 
 import android.app.Application;
 import android.os.AsyncTask;
@@ -6,17 +6,17 @@ import android.os.AsyncTask;
 import androidx.lifecycle.LiveData;
 
 import com.xelorium.soccerleaguetable.model.TeamModel;
+import com.xelorium.soccerleaguetable.room.TeamDao;
+import com.xelorium.soccerleaguetable.room.TeamDatabase;
 
 import java.util.List;
 
 public class TeamRepository {
-    private TeamDao teamDao;
     private LiveData<List<TeamModel>> allTeams;
     private TeamDatabase database;
 
     public TeamRepository(Application application){
         database = TeamDatabase.getInstance(application);
-        teamDao = database.teamDao();
         allTeams = database.teamDao().getAllTeams();
     }
 
@@ -45,7 +45,7 @@ public class TeamRepository {
         private TeamDao teamDao;
 
         private InsertTeamAsyncTask(TeamDatabase teamDatabase){
-            this.teamDao = teamDatabase.teamDao();
+            teamDao = teamDatabase.teamDao();
         }
 
         @Override

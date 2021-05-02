@@ -14,6 +14,7 @@ import com.xelorium.soccerleaguetable.databinding.ActivityMainBinding;
 import com.xelorium.soccerleaguetable.model.TeamModel;
 import com.xelorium.soccerleaguetable.network.APIService;
 import com.xelorium.soccerleaguetable.network.RetroInstance;
+import com.xelorium.soccerleaguetable.room.TeamRepository;
 import com.xelorium.soccerleaguetable.viewmodel.TeamListViewModel;
 
 import java.util.List;
@@ -83,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<List<TeamModel>>() {
             @Override
             public void onResponse(Call<List<TeamModel>> call, Response<List<TeamModel>> response) {
-//                teamList.postValue(response.body());
                 teamRepository.deleteAllTeams();
                 teamRepository.insert(response.body());
             }

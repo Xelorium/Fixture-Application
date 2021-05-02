@@ -5,7 +5,9 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.xelorium.soccerleaguetable.databinding.ItemTeamBinding;
+
+import com.google.android.material.textview.MaterialTextView;
+import com.xelorium.soccerleaguetable.databinding.ItemMainTeamBinding;
 import com.xelorium.soccerleaguetable.model.TeamModel;
 
 import java.util.List;
@@ -20,11 +22,6 @@ public class TeamListAdapter extends RecyclerView.Adapter<TeamListAdapter.TeamVi
         this.teamList = teamList;
     }
 
-    public void setTeamList(List<TeamModel> teamList) {
-        this.teamList = teamList;
-        notifyDataSetChanged();
-    }
-
     public void getAllTeams(List<TeamModel> teamList)
     {
         this.teamList=teamList;
@@ -34,7 +31,7 @@ public class TeamListAdapter extends RecyclerView.Adapter<TeamListAdapter.TeamVi
     @Override
     public TeamListAdapter.TeamViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        return new TeamViewHolder(ItemTeamBinding.inflate(LayoutInflater.from(context)));
+        return new TeamViewHolder(ItemMainTeamBinding.inflate(LayoutInflater.from(context)));
 
     }
 
@@ -51,12 +48,21 @@ public class TeamListAdapter extends RecyclerView.Adapter<TeamListAdapter.TeamVi
         return 0;
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
     public class TeamViewHolder extends RecyclerView.ViewHolder {
 
-        private ItemTeamBinding binding;
+        private ItemMainTeamBinding binding;
 
-
-        public TeamViewHolder(ItemTeamBinding binding) {
+        public TeamViewHolder(ItemMainTeamBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

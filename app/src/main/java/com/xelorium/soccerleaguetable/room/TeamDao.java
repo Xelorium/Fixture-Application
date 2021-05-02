@@ -1,4 +1,4 @@
-package com.xelorium.soccerleaguetable;
+package com.xelorium.soccerleaguetable.room;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -15,7 +15,7 @@ import java.util.List;
 @Dao
 public interface TeamDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(List<TeamModel> teamModel);
 
     @Update
