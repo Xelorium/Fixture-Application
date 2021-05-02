@@ -25,6 +25,11 @@ public class TeamListAdapter extends RecyclerView.Adapter<TeamListAdapter.TeamVi
         notifyDataSetChanged();
     }
 
+    public void getAllTeams(List<TeamModel> teamList)
+    {
+        this.teamList=teamList;
+    }
+
     @NonNull
     @Override
     public TeamListAdapter.TeamViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -35,7 +40,7 @@ public class TeamListAdapter extends RecyclerView.Adapter<TeamListAdapter.TeamVi
 
     @Override
     public void onBindViewHolder(@NonNull TeamListAdapter.TeamViewHolder holder, int position) {
-        holder.binding.tvItemTeamName.setText(this.teamList.get(position).getName());
+        holder.binding.tvItemTeamName.setText(this.teamList.get(position).getPosition() + "-) "+this.teamList.get(position).getName());
     }
 
     @Override

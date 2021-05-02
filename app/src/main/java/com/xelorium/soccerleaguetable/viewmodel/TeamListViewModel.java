@@ -1,8 +1,14 @@
 package com.xelorium.soccerleaguetable.viewmodel;
 
+import android.app.Application;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.xelorium.soccerleaguetable.TeamRepository;
 import com.xelorium.soccerleaguetable.model.TeamModel;
 import com.xelorium.soccerleaguetable.network.APIService;
 import com.xelorium.soccerleaguetable.network.RetroInstance;
@@ -13,34 +19,26 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TeamListViewModel extends ViewModel {
+public class TeamListViewModel extends AndroidViewModel {
 
-    private MutableLiveData<List<TeamModel>> teamList;
+    private TeamRepository teamRepository;
+    private LiveData<List<TeamModel>> getAllTeams;
 
-    public TeamListViewModel() {
-        teamList = new MutableLiveData<>();
+    public TeamListViewModel(@NonNull Application application) {
+        super(application);
+        teamRepository = new TeamRepository(application);
+        getAllTeams = teamRepository.getAllTeams();
     }
 
-    public MutableLiveData<List<TeamModel>> getTeamListObserver() {
-        return teamList;
+    public void insert(List<TeamModel> teamModel){
+        teamRepository.insert(teamModel);
     }
 
-    public void makeApiCall() {
-        APIService apiService = RetroInstance.getRetroClient().create(APIService.class);
-        Call<List<TeamModel>> call = apiService.getTeamList();
-        call.enqueue(new Callback<List<TeamModel>>() {
-            @Override
-            public void onResponse(Call<List<TeamModel>> call, Response<List<TeamModel>> response) {
-                teamList.postValue(response.body());
-            }
-
-            @Override
-            public void onFailure(Call<List<TeamModel>> call, Throwable t) {
-                teamList.postValue(null);
-
-            }
-        });
+    public LiveData<List<TeamModel>> getGetAllTeams() {
+        return getAllTeams;
     }
+
+
 
 
 }
