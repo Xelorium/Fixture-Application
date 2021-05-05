@@ -6,9 +6,11 @@ import android.os.AsyncTask;
 import androidx.lifecycle.LiveData;
 
 import com.xelorium.soccerleaguetable.model.TeamModel;
+import com.xelorium.soccerleaguetable.model.WeekModel;
 import com.xelorium.soccerleaguetable.room.TeamDao;
 import com.xelorium.soccerleaguetable.room.TeamDatabase;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TeamRepository {

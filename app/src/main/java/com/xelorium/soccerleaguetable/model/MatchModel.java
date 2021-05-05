@@ -1,20 +1,31 @@
 package com.xelorium.soccerleaguetable.model;
 
-public class MatchModel {
+import java.util.ArrayList;
 
-    private int weekCount;
+public class MatchModel <T extends Object>{
 
-    public MatchModel(int weekCount) {
-        this.weekCount = weekCount;
+    private T homeTeamName;
+    private T awayTeamName;
+
+
+    public MatchModel(T homeTeamName, T awayTeamName) {
+        this.homeTeamName = homeTeamName;
+        this.awayTeamName = awayTeamName;
     }
 
-    public int getWeekCount() {
-        return weekCount;
+    public T getHomeTeamName() {
+        return homeTeamName;
     }
 
-    public void setWeekCount(int weekCount) {
-        this.weekCount = weekCount;
+    public void setHomeTeamName(T homeTeamName) {
+        this.homeTeamName = homeTeamName;
     }
 
+    public T getAwayTeamName() {
+        return awayTeamName;
+    }
 
+    public void setAwayTeamName(T awayTeamName) {
+        this.awayTeamName = awayTeamName;
+    }
 }

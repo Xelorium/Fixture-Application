@@ -1,27 +1,34 @@
 package com.xelorium.soccerleaguetable;
 
+import android.content.Intent;
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.SnapHelper;
 
-import android.os.Bundle;
-
-import com.xelorium.soccerleaguetable.adapter.MatchAdapter;
+import com.xelorium.soccerleaguetable.adapter.WeekAdapter;
 import com.xelorium.soccerleaguetable.databinding.ActivityFixtureBinding;
+import com.xelorium.soccerleaguetable.model.FixtureModel;
 import com.xelorium.soccerleaguetable.model.MatchModel;
+import com.xelorium.soccerleaguetable.model.TeamModel;
+import com.xelorium.soccerleaguetable.model.WeekModel;
 import com.xelorium.soccerleaguetable.room.TeamRepository;
-import com.xelorium.soccerleaguetable.viewmodel.TeamListViewModel;
+import com.xelorium.soccerleaguetable.viewmodel.FixtureViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class FixtureActivity extends AppCompatActivity {
 
     private ActivityFixtureBinding binding;
-    private ArrayList<MatchModel> matchList;
-    private TeamListViewModel viewModel;
-    private MatchAdapter adapter;
-    private TeamRepository teamRepository;
+    private FixtureViewModel viewModel;
+    private WeekAdapter weekAdapter;
+    private ArrayList<FixtureModel> fixtureList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,25 +36,21 @@ public class FixtureActivity extends AppCompatActivity {
         binding = ActivityFixtureBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        matchList = new ArrayList<>();
+        Intent intent = getIntent();
+        fixtureList = intent.getParcelableArrayListExtra("FIXTURE_LIST");
 
-        matchList.add(new MatchModel(1));
-        matchList.add(new MatchModel(2));
-        matchList.add(new MatchModel(3));
-        matchList.add(new MatchModel(4));
-        matchList.add(new MatchModel(5));
-        matchList.add(new MatchModel(6));
+        weekAdapter = new WeekAdapter(this, fixtureList);
+
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        SnapHelper snapHelper = new PagerSnapHelper();
         binding.rvFixtureWeek.setLayoutManager(linearLayoutManager);
         binding.rvFixtureWeek.setHasFixedSize(true);
-        adapter = new MatchAdapter(this, matchList);
+        SnapHelper snapHelper = new PagerSnapHelper();
+        binding.rvFixtureWeek.setAdapter(weekAdapter);
+        //notify
         snapHelper.attachToRecyclerView(binding.rvFixtureWeek);
-
-        binding.rvFixtureWeek.setAdapter(adapter);
-
 
 
     }
+
 }
