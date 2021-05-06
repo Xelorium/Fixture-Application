@@ -55,14 +55,14 @@ public class TeamListAdapter extends RecyclerView.Adapter<TeamListAdapter.TeamVi
     public int getItemCount() {
         if (this.teamList != null) {
 
-            if (lastIndex>0){
+            if (lastIndex > 0) {
                 if (!teamList.get(lastIndex - 1).getName().equals("") && !teamList.get(lastIndex - 1).getPosition().equals("")) {
                     return this.teamList.size();
                 } else {
                     return this.teamList.size() - 1;
                 }
             }
-            
+
         }
 
         return 0;

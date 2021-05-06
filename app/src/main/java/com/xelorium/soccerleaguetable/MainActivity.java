@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
                     teamRepository.deleteAllTeams();
 
                     //Adding single team to the team list for testing odd and even numbers
-                    response.body().add(new TeamModel("21", "Chelsea"));
+                    //response.body().add(new TeamModel("21", "Test Team"));
 
                     if (response.body().size() % 2 != 0) {
                         tempList.add(new TeamModel("", ""));
