@@ -19,7 +19,6 @@ import com.xelorium.soccerleaguetable.network.RetroInstance;
 import com.xelorium.soccerleaguetable.room.TeamRepository;
 import com.xelorium.soccerleaguetable.viewmodel.TeamListViewModel;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -43,18 +42,23 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        binding.pbTeamList.setVisibility(View.VISIBLE);
+
         teamModelList = new ArrayList<>();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         binding.rvTeamList.setLayoutManager(linearLayoutManager);
         adapter = new TeamListAdapter(this, teamModelList);
 
-        teamRepository=new TeamRepository(getApplication());
+        teamRepository = new TeamRepository(getApplication());
 
+
+        tempList = new ArrayList<>();
 
         ArrayList<FixtureModel> fixtureList = new ArrayList<>();
 
-        viewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance((this.getApplication()))).get(TeamListViewModel.class);
+        viewModel = new ViewModelProvider(
+                this, ViewModelProvider.AndroidViewModelFactory.getInstance((this.getApplication()))).get(TeamListViewModel.class);
 
         makeApiCall();
 
@@ -62,63 +66,75 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<TeamModel> list) {
 
-                if (list != null){
+                if (list != null) {
+                    binding.pbTeamList.setVisibility(View.VISIBLE);
                     teamModelList = list;
 
                     fixtureList.clear();
 
-                    FixtureGenerator<String> fixtureGenerator = new FixtureGenerator<>();
 
-                    List<String> teams = new LinkedList<String>();
-
-                    for (int i=0; i< teamModelList.size(); i++){
-                        teams.add(teamModelList.get(i).getName());
-                    }
-
-                    String result = "";
-
-                    List<List<MatchModel<String>>> rounds = fixtureGenerator.getFixtures(teams, true);
-
-
-                    for(int i=0; i<rounds.size(); i++) {
-
-                        result = "";
-
-                        System.out.println("Round " + (i + 1));
-                        int weekCount = i;
-                        List<MatchModel<String>> round = rounds.get(i);
-
-                        for (MatchModel<String> fixture : round) {
-                            result += fixture.getHomeTeamName() + " - " + fixture.getAwayTeamName()+"\n";
-
-                        }
-
-                        fixtureList.add(new FixtureModel(weekCount, result));
-
-                    }
-
-                    //fixture - 38 * 10 = 200 maç arraylist
-                    //list -- 10 *20 String (fen -besk) - String(gal - bes) -
-                    //teamSize -- 20 -- list.count
+                    binding.pbTeamList.setVisibility(View.GONE);
                     binding.rvTeamList.setAdapter(adapter);
                     adapter.getAllTeams(teamModelList);
                     binding.tvMainNoData.setVisibility(View.GONE);
                 } else {
                     binding.tvMainNoData.setVisibility(View.VISIBLE);
+                    binding.pbTeamList.setVisibility(View.GONE);
                 }
 
 
             }
         });
 
-
         binding.fabDrawFixture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                FixtureGenerator<String> fixtureGenerator = new FixtureGenerator<>();
+
+                List<String> teams = new LinkedList<String>();
+
+                for (int i = 0; i < teamModelList.size(); i++) {
+                    teams.add(teamModelList.get(i).getName());
+                }
+
+                String result = "";
+
+                List<List<MatchModel<String>>> rounds = fixtureGenerator.getFixtures(teams, true);
+
+
+                for (int i = 0; i < rounds.size(); i++) {
+
+                    result = "";
+
+                    int weekCount = i;
+                    List<MatchModel<String>> round = rounds.get(i);
+
+                    for (MatchModel<String> fixture : round) {
+
+                        if ((!fixture.getHomeTeamName().equals("") && !fixture.getAwayTeamName().equals(""))
+                                && (!fixture.getHomeTeamName().equals(fixture.getAwayTeamName()))) {
+
+                            result += fixture.getHomeTeamName() + " - " + fixture.getAwayTeamName() + "\n";
+
+                        }
+
+
+                    }
+
+                    fixtureList.add(new FixtureModel(weekCount, result));
+
+                }
+
                 Intent intent = new Intent(MainActivity.this, FixtureActivity.class);
                 intent.putExtra("FIXTURE_LIST", fixtureList);
-                startActivity(intent);
+
+                if (!fixtureList.isEmpty()) {
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
+
+                }
+
             }
         });
 
@@ -130,16 +146,39 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<List<TeamModel>>() {
             @Override
             public void onResponse(Call<List<TeamModel>> call, Response<List<TeamModel>> response) {
-                teamRepository.deleteAllTeams();
-                teamRepository.insert(response.body());
+
+                if (response.isSuccessful()) {
+                    teamRepository.deleteAllTeams();
+
+                    //Adding single team to the team list for testing odd and even numbers
+                    response.body().add(new TeamModel("21", "Chelsea"));
+
+                    if (response.body().size() % 2 != 0) {
+                        tempList.add(new TeamModel("", ""));
+                        teamRepository.insert(response.body());
+                        teamRepository.insert(tempList);
+                        binding.fabDrawFixture.setVisibility(View.VISIBLE);
+
+                    } else {
+                        teamRepository.insert(response.body());
+                        binding.fabDrawFixture.setVisibility(View.VISIBLE);
+
+                    }
+
+                } else {
+                    binding.pbTeamList.setVisibility(View.GONE);
+                    binding.tvMainNoData.setVisibility(View.VISIBLE);
+                }
 
             }
 
             @Override
             public void onFailure(Call<List<TeamModel>> call, Throwable t) {
-                System.out.println("hata");
+                binding.pbTeamList.setVisibility(View.GONE);
+                binding.tvMainNoData.setVisibility(View.VISIBLE);
             }
         });
+
     }
 
 }

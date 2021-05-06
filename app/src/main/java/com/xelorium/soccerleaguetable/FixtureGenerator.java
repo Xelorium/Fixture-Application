@@ -9,6 +9,7 @@ public class FixtureGenerator<T extends Object> {
 
     public List<List<MatchModel<T>>> getFixtures(List<T> teams, boolean includeReverseFixtures) {
 
+
         int numberOfTeams = teams.size();
 
         boolean ghost = false;
@@ -30,6 +31,7 @@ public class FixtureGenerator<T extends Object> {
                 if (match == 0) {
                     away = numberOfTeams - 1;
                 }
+
                 fixtures.add(new MatchModel<T>(teams.get(home), teams.get(away)));
             }
             rounds.add(fixtures);
@@ -57,11 +59,11 @@ public class FixtureGenerator<T extends Object> {
             }
         }
 
-        if(includeReverseFixtures){
+        if (includeReverseFixtures) {
             List<List<MatchModel<T>>> reverseFixtures = new LinkedList<List<MatchModel<T>>>();
-            for(List<MatchModel<T>> round: rounds){
+            for (List<MatchModel<T>> round : rounds) {
                 List<MatchModel<T>> reverseRound = new LinkedList<MatchModel<T>>();
-                for(MatchModel<T> fixture: round){
+                for (MatchModel<T> fixture : round) {
                     reverseRound.add(new MatchModel<T>(fixture.getAwayTeamName(), fixture.getHomeTeamName()));
                 }
                 reverseFixtures.add(reverseRound);

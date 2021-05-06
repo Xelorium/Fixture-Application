@@ -15,12 +15,17 @@ import com.xelorium.soccerleaguetable.model.TeamModel;
 public abstract class TeamDatabase extends RoomDatabase {
 
     private static TeamDatabase instance;
+    private static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
+        @Override
+        public void onCreate(@NonNull SupportSQLiteDatabase db) {
+            super.onCreate(db);
+            new PopulateDbAsyncTask(instance).execute();
+        }
+    };
 
-    public abstract TeamDao teamDao();
+    public static synchronized TeamDatabase getInstance(Context context) {
 
-    public static synchronized TeamDatabase getInstance(Context context){
-
-        if (instance == null){
+        if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),
                     TeamDatabase.class, "team_database")
                     .fallbackToDestructiveMigration()
@@ -30,18 +35,12 @@ public abstract class TeamDatabase extends RoomDatabase {
         return instance;
     }
 
-    private static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback(){
-        @Override
-        public void onCreate(@NonNull SupportSQLiteDatabase db) {
-            super.onCreate(db);
-            new PopulateDbAsyncTask(instance).execute();
-        }
-    };
+    public abstract TeamDao teamDao();
 
-    private static class PopulateDbAsyncTask extends AsyncTask<Void,Void,Void>{
+    private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void> {
         private TeamDao teamDao;
 
-        private PopulateDbAsyncTask(TeamDatabase db){
+        private PopulateDbAsyncTask(TeamDatabase db) {
             teamDao = db.teamDao();
         }
 

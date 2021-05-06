@@ -8,14 +8,6 @@ public class WeekModel {
 
     private ArrayList<MatchModel> matchObject;
 
-    public ArrayList<MatchModel> getMatchObject() {
-        return matchObject;
-    }
-
-    public void setMatchObject(ArrayList<MatchModel> matchObject) {
-        this.matchObject = matchObject;
-    }
-
     public WeekModel() {
     }
 
@@ -24,6 +16,13 @@ public class WeekModel {
         this.matchObject = matchObject;
     }
 
+    public ArrayList<MatchModel> getMatchObject() {
+        return matchObject;
+    }
+
+    public void setMatchObject(ArrayList<MatchModel> matchObject) {
+        this.matchObject = matchObject;
+    }
 
     public int getWeekCount() {
         return weekCount;

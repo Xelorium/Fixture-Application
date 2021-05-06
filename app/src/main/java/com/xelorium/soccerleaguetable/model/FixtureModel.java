@@ -5,6 +5,17 @@ import android.os.Parcelable;
 
 public class FixtureModel implements Parcelable {
 
+    public static final Creator<FixtureModel> CREATOR = new Creator<FixtureModel>() {
+        @Override
+        public FixtureModel createFromParcel(Parcel in) {
+            return new FixtureModel(in);
+        }
+
+        @Override
+        public FixtureModel[] newArray(int size) {
+            return new FixtureModel[size];
+        }
+    };
     private int weekCount;
     private String matchName;
 
@@ -14,6 +25,11 @@ public class FixtureModel implements Parcelable {
     public FixtureModel(int weekCount, String matchName) {
         this.weekCount = weekCount;
         this.matchName = matchName;
+    }
+
+    protected FixtureModel(Parcel in) {
+        weekCount = in.readInt();
+        matchName = in.readString();
     }
 
     public int getWeekCount() {
@@ -31,23 +47,6 @@ public class FixtureModel implements Parcelable {
     public void setMatchName(String matchName) {
         this.matchName = matchName;
     }
-
-    protected FixtureModel(Parcel in) {
-        weekCount = in.readInt();
-        matchName = in.readString();
-    }
-
-    public static final Creator<FixtureModel> CREATOR = new Creator<FixtureModel>() {
-        @Override
-        public FixtureModel createFromParcel(Parcel in) {
-            return new FixtureModel(in);
-        }
-
-        @Override
-        public FixtureModel[] newArray(int size) {
-            return new FixtureModel[size];
-        }
-    };
 
     @Override
     public int describeContents() {

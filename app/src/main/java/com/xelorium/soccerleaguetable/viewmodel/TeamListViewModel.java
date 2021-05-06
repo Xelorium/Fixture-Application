@@ -6,8 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.xelorium.soccerleaguetable.room.TeamRepository;
 import com.xelorium.soccerleaguetable.model.TeamModel;
+import com.xelorium.soccerleaguetable.room.TeamRepository;
 
 import java.util.List;
 
@@ -22,15 +22,13 @@ public class TeamListViewModel extends AndroidViewModel {
         getAllTeams = teamRepository.getAllTeams();
     }
 
-    public void insert(List<TeamModel> teamModel){
+    public void insert(List<TeamModel> teamModel) {
         teamRepository.insert(teamModel);
     }
 
     public LiveData<List<TeamModel>> getGetAllTeams() {
         return getAllTeams;
     }
-
-
 
 
 }

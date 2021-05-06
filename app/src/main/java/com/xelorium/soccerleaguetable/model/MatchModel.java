@@ -1,8 +1,6 @@
 package com.xelorium.soccerleaguetable.model;
 
-import java.util.ArrayList;
-
-public class MatchModel <T extends Object>{
+public class MatchModel<T extends Object> {
 
     private T homeTeamName;
     private T awayTeamName;

@@ -16,4 +16,5 @@ public interface APIService {
     })
     @GET("/premierleague/squads")
     Call<List<TeamModel>> getTeamList();
+
 }
