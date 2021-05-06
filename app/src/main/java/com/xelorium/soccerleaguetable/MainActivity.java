@@ -131,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (!fixtureList.isEmpty()) {
                     startActivity(intent);
+                    fixtureList.clear();
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
 
                 }
